@@ -1,0 +1,20 @@
+FROM python:3.13.7-slim
+
+ENV TZ Europe/Moscow
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN apt-get update && \
+    apt-get install -y build-essential curl wget git zip && \
+    apt-get autoremove -qyy && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/shad
+COPY pyproject.toml /opt/shad/pyproject.toml
+COPY uv.lock /opt/shad/uv.lock
+RUN python3 -m pip install --upgrade uv && \
+    uv sync --frozen
+# Install checker into the uv-managed virtualenv so `uv run` can resolve it
+RUN uv pip install --python /opt/shad/.venv/bin/python git+https://github.com/manytask/checker.git
+ENV PATH="/opt/shad/.venv/bin:$PATH"
+# Install mypy into the project venv without requiring pip inside the venv
+RUN uv pip install --python /opt/shad/.venv/bin/python mypy

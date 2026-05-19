@@ -1,0 +1,11 @@
+FROM gitlab.manytask.org:5050/python-ai360/public-2026-spring/base-image:latest
+
+COPY . /opt/shad
+RUN uv pip install /opt/shad/tools/testlib
+RUN cp /opt/shad/.gitlab-ci.yml /opt/shad/.grader-ci.yml  # Create reference for comparison when running tests
+
+RUN find /opt/shad/ -name '*.py' | xargs chmod o-rwx
+
+# debug
+RUN uv pip uninstall manytask-checker
+RUN uv pip install git+https://github.com/manytask/checker.git

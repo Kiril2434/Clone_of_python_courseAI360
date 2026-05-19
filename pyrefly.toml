@@ -1,0 +1,7 @@
+project-excludes = [
+    "**/tests/",
+    "**/.tmp/",
+    "**/.venv/",
+]
+ignore-missing-imports = ["*"]
+untyped-def-behavior = "skip-and-infer-return-any"

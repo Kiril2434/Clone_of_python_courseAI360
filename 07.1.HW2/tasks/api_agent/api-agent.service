@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple Agent API
+After=network.target
+
+[Service]
+WorkingDirectory=/root/api_agent
+Environment=AUTH_TOKEN=dev-secret
+ExecStart=/root/api_agent/venv/bin/uvicorn api_agent.app:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

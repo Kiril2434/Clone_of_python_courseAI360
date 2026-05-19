@@ -1,0 +1,73 @@
+version: 1
+
+# structure:
+#   private_patterns: ["simple_pass_manager"]
+
+parameters:
+  allow_change: [
+    "**/pyproject.toml",
+    "**/setup.cfg",
+    "**/setup.py",
+  ]
+
+# settings for Tester, uses .checker.yml and `params` and each task params (in .task.yml)
+# run once per task
+task_pipeline:
+  - name: "Check forbidden regexps"
+    fail: fast  # fast, after_all, never
+    run: "check_regexps"
+    args:
+      origin: "${{ global.temp_dir }}/${{ task.task_sub_path }}"
+      patterns: ["**/*.py"]
+      regexps: ["exit(0)"]
+
+  - name: "Run linter"
+    run_if: ${{ parameters.run_linting }}
+    fail: after_all  # fast, after_all, never
+    run: "run_script"
+    args:
+      origin: ${{ global.temp_dir }}
+      script: "uv run --directory /opt/shad ruff check --config=${{ global.temp_dir + '/pyproject.toml' }} ${{ global.temp_dir + '/' + task.task_sub_path }}"
+
+  - name: "Run typechecker (pyrefly)"
+    run_if: ${{ parameters.run_typechecking }}
+    fail: after_all  # fast, after_all, never
+    run: "run_script"
+    args:
+      origin: ${{ global.temp_dir }}
+      script: "PYTHONPATH=tools/testlib:${{ task.task_sub_path }}:$PYTHONPATH /opt/shad/.venv/bin/pyrefly check ${{ task.task_sub_path }}"
+
+  - name: "Install modules"
+    run_if: ${{ parameters.run_testing }}
+    fail: after_all  # fast, after_all, never
+    run: "run_pytest_module"
+    register_output: "pytest_module_output"
+    args:
+      origin: ${{ global.temp_dir }}
+      target: ${{ task.task_sub_path }}
+      timeout: ${{ parameters.timeout }}
+      coverage: ${{ parameters.coverage }}
+
+  - name: "Collect tests"
+    run_if: ${{ parameters.run_testing }}
+    fail: after_all  # fast, after_all, never
+    run: "run_script"
+    args:
+      origin: ${{ global.temp_dir }}
+      script: "uv run --directory /opt/shad python -m pytest -c ${{ global.temp_dir + '/pyproject.toml' }} --tb=no -qq --collect-only ${{ global.temp_dir + '/' + task.task_sub_path }}"
+      timeout: ${{ parameters.timeout }}
+#        isolate: true
+
+  - name: "Run tests"
+    run_if: ${{ parameters.run_testing }}
+    fail: after_all  # fast, after_all, never
+    run: "run_pytest"
+    register_output: "pytest_output"
+    args:
+      origin: ${{ global.temp_dir }}
+      target: ${{ task.task_sub_path }}
+      timeout: ${{ parameters.timeout }}
+      coverage: ${{ parameters.coverage }}
+      # The arg below needs newest checker to work, see https://github.com/manytask/checker/pull/201
+      partially_scored: ${{ task.task_sub_path in parameters.partial_scoring_tasks }}
+#        isolate: true
