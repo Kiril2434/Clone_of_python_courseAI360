@@ -3,185 +3,272 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-<meta name="theme-color" content="#0d0b0a">
-<title>Тайна двухколёсного экипажа — детективное расследование</title>
+<meta name="theme-color" content="#e3d7bb">
+<title>Дело о двухколёсном экипаже</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Ruslan+Display&family=Oswald:wght@400;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
 <style>
+/* =========================================================================
+   ПАПКА СЛЕДОВАТЕЛЯ. Один свет, намеренно: дело выглядит делом на любом фоне.
+   ========================================================================= */
 :root{
-  --bg:#0d0b0a; --bg2:#151110; --panel:#1b1614; --panel2:#221b18;
-  --ink:#e8ddcd; --ink-dim:#a2948260; --muted:#9a8b78;
-  --gold:#c9a227; --gold-soft:#e0be4d; --blood:#8e2b20; --blood-soft:#c04a34;
-  --green:#5d8a5e; --line:#3a2f28;
-  --shadow:0 18px 40px rgba(0,0,0,.55);
+  --manila:#e3d7bb; --manila-d:#cdbe9c; --sheet:#f4eddc; --sheet-2:#eee5d0;
+  --ink:#1b1815; --ink-2:#463f36; --ink-3:#6d6355;
+  --stamp:#b4271e; --pencil:#2e4a6b; --kraft:#b99f6e; --tape:#d8c894;
+  --rule:#c9b894;
+  --shadow:0 1px 0 #fff6, 0 10px 22px rgba(40,30,15,.22);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  font-size:16px;line-height:1.6;overscroll-behavior-y:none}
+html{-webkit-text-size-adjust:100%}
 body{
+  margin:0;background:#8a7550;color:var(--ink);
+  font-family:"IBM Plex Serif",Georgia,serif;font-size:17px;line-height:1.62;
+  overscroll-behavior-y:none;
   background-image:
-    radial-gradient(900px 500px at 50% -10%, rgba(201,162,39,.10), transparent 70%),
-    radial-gradient(600px 400px at 100% 100%, rgba(142,43,32,.10), transparent 70%);
+    repeating-linear-gradient(97deg,rgba(0,0,0,.05) 0 2px,transparent 2px 7px),
+    radial-gradient(120% 80% at 50% 0,#9c8560,#6f5c3c 70%,#5b4a2f);
   background-attachment:fixed;
-  min-height:100dvh;
 }
 img{max-width:100%;display:block}
-button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
-h1,h2,h3,.serif{font-family:"Cormorant Garamond",Georgia,serif}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;text-align:left}
+:focus-visible{outline:3px solid var(--pencil);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-#app{max-width:720px;margin:0 auto;padding:0 0 96px;position:relative}
+.display{font-family:"Ruslan Display",Impact,serif}
+.poster{font-family:Oswald,"Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.06em}
+.type{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.hand{font-family:Caveat,"Segoe Script",cursive}
 
-/* ---------- top bar ---------- */
-.top{position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);
-  background:linear-gradient(#0d0b0af2,#0d0b0ad0);border-bottom:1px solid var(--line)}
-.top-in{display:flex;align-items:center;gap:10px;padding:10px 14px;
-  padding-top:calc(10px + env(safe-area-inset-top))}
-.badge{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.day{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:700;color:var(--gold-soft);line-height:1.1}
-.clock{margin-left:auto;display:flex;align-items:center;gap:6px}
-.pip{width:9px;height:16px;border-radius:2px;background:#2c2521;border:1px solid #443831}
-.pip.on{background:linear-gradient(180deg,var(--gold-soft),#8a6c15);border-color:#6b5411;
-  box-shadow:0 0 8px rgba(201,162,39,.45)}
-.progressline{height:2px;background:#241d1a}
-.progressline i{display:block;height:100%;background:linear-gradient(90deg,var(--blood),var(--gold));transition:width .5s}
+#app{max-width:640px;margin:0 auto;padding:0 0 92px;position:relative}
 
-/* ---------- cards / scenes ---------- */
-.wrap{padding:14px}
-.card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
-  border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px}
-.illus{position:relative;aspect-ratio:16/9;background:#0a0807;overflow:hidden}
-.illus img,.illus svg{width:100%;height:100%;object-fit:cover;display:block}
-.illus:after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(13,11,10,0) 45%,rgba(13,11,10,.95) 100%);pointer-events:none}
-.illus .cap{position:absolute;left:14px;right:14px;bottom:10px;z-index:2}
-.illus .cap b{display:block;font-family:"Cormorant Garamond",serif;font-size:25px;line-height:1.15;color:#f3e9d8;
-  text-shadow:0 2px 14px #000}
-.illus .cap span{font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold-soft)}
-.body{padding:16px 16px 6px}
-.body p{margin:0 0 14px;font-size:16.5px;color:#ddd2c1}
-.body p.q{border-left:2px solid var(--blood);padding-left:12px;font-style:italic;color:#e9dcc7}
-.body p.note{background:#12100e;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;
-  font-size:14.5px;color:var(--muted);font-style:normal}
-.who{font-family:"Cormorant Garamond",serif;color:var(--gold-soft);font-size:17px;font-weight:700;
-  display:block;margin-bottom:2px;letter-spacing:.02em}
+/* ---------- бумага и её шероховатый край ---------- */
+.paper{position:relative;background:var(--sheet);box-shadow:var(--shadow);
+  background-image:
+    radial-gradient(circle at 18% 12%,rgba(160,130,80,.10),transparent 42%),
+    radial-gradient(circle at 82% 88%,rgba(140,110,60,.09),transparent 46%);}
+.paper:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.45;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='.3'/></svg>")}
+.torn{clip-path:polygon(0 6px,3% 2px,8% 7px,14% 1px,21% 6px,29% 2px,37% 7px,45% 2px,54% 6px,62% 1px,70% 6px,78% 2px,86% 7px,93% 2px,100% 6px,100% calc(100% - 5px),94% 100%,86% calc(100% - 5px),77% 100%,68% calc(100% - 4px),58% 100%,48% calc(100% - 5px),38% 100%,28% calc(100% - 4px),18% 100%,9% calc(100% - 5px),0 100%)}
 
-/* ---------- choices ---------- */
-.choices{padding:4px 14px 16px;display:flex;flex-direction:column;gap:10px}
-.ch{width:100%;text-align:left;background:#191412;border:1px solid #3d312a;border-radius:13px;
-  padding:13px 14px;display:flex;gap:11px;align-items:flex-start;transition:.15s;position:relative}
-.ch:active{transform:scale(.985);background:#221a16}
-.ch .arrow{color:var(--gold);flex:0 0 auto;margin-top:2px;font-size:13px}
-.ch .txt{flex:1;font-size:15.5px;color:#e6dbc9}
-.ch .cost{flex:0 0 auto;font-size:11px;color:var(--muted);border:1px solid var(--line);
-  border-radius:999px;padding:2px 7px;margin-top:2px;white-space:nowrap}
-.ch.ev{border-color:#5d4a1c;background:linear-gradient(180deg,#1f1809,#1a1410)}
-.ch.ev .arrow{color:var(--gold-soft)}
-.ch.locked{opacity:.42;filter:grayscale(.6)}
-.ch small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+/* ---------- шапка: язычок папки ---------- */
+.top{position:sticky;top:0;z-index:40}
+.tab{max-width:640px;margin:0 auto;background:var(--manila);
+  border-bottom:2px solid #00000022;padding:9px 16px 8px;
+  padding-top:calc(9px + env(safe-area-inset-top));
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 6px 14px rgba(40,30,15,.3);
+  background-image:repeating-linear-gradient(91deg,rgba(0,0,0,.028) 0 1px,transparent 1px 5px)}
+.tab .case{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+  color:var(--ink-3);text-transform:uppercase}
+.tab .dayname{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.03em;
+  font-size:19px;line-height:1.05;color:var(--ink);font-weight:600}
+.tally{margin-left:auto;display:flex;gap:4px;align-items:flex-end}
+.tally i{display:block;width:6px;height:19px;background:var(--ink);transform:rotate(-7deg);border-radius:1px}
+.tally i.gone{background:none;border-left:2px dotted #9d907c;height:15px}
+.tab .hrs{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-3);
+  letter-spacing:.1em;margin-left:6px;align-self:center}
 
-/* ---------- hub ---------- */
-.hub-h{padding:18px 16px 6px}
-.hub-h h2{margin:0;font-size:29px;color:#f0e5d2}
-.hub-h .sub{color:var(--muted);font-size:14px;margin-top:4px}
-.loc{display:flex;gap:12px;align-items:center;background:linear-gradient(180deg,var(--panel),#1c1613);
-  border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;width:100%;text-align:left}
-.loc .ic{width:46px;height:46px;border-radius:11px;flex:0 0 auto;display:grid;place-items:center;
-  background:#0f0c0b;border:1px solid #3a2f28;font-size:22px}
-.loc b{display:block;font-family:"Cormorant Garamond",serif;font-size:18.5px;color:#efe4d1;font-weight:700}
-.loc span{font-size:13px;color:var(--muted);display:block;line-height:1.35}
-.loc .done{margin-left:auto;color:var(--green);font-size:18px;flex:0 0 auto}
-.loc.spent{opacity:.5}
+/* ---------- лист сцены ---------- */
+.wrap{padding:16px 12px}
+.sheet-card{position:relative;margin-bottom:18px}
+.sheet-card .paper{padding:0 0 4px}
+.hdr{padding:16px 20px 0}
+.hdr .where{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--stamp)}
+.hdr h2{font-family:Oswald,sans-serif;text-transform:uppercase;font-weight:600;letter-spacing:.01em;
+  margin:3px 0 0;font-size:clamp(25px,7.2vw,33px);line-height:1.02;text-wrap:balance}
+.hdr .rule{height:2px;background:var(--ink);margin:12px 0 0;opacity:.85}
+.hdr .rule+.rule{margin-top:2px;height:1px;opacity:.45}
 
-/* ---------- toast ---------- */
-#toasts{position:fixed;left:0;right:0;bottom:calc(74px + env(safe-area-inset-bottom));z-index:90;
-  display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 14px}
-.toast{background:#1e1712;border:1px solid var(--gold);border-radius:12px;padding:10px 14px;
-  box-shadow:0 10px 30px #000;max-width:520px;width:100%;animation:tin .35s}
-.toast b{color:var(--gold-soft);font-family:"Cormorant Garamond",serif;font-size:16px}
-.toast p{margin:2px 0 0;font-size:13.5px;color:#cdc0ad}
-@keyframes tin{from{opacity:0;transform:translateY(14px)}}
+/* вклеенный рисунок */
+.plate{margin:20px 18px 4px;position:relative;transform:rotate(-.9deg)}
+.plate .in{position:relative;background:#fbf6e9;padding:7px 7px 0;
+  box-shadow:0 2px 0 #0000000d,0 9px 18px rgba(40,30,15,.26);overflow:hidden}
+.plate svg,.plate img{width:100%;display:block}
+.plate img.ph{position:absolute;left:7px;right:7px;top:7px;width:calc(100% - 14px);
+  opacity:0;transition:opacity .7s;mix-blend-mode:multiply;filter:sepia(.5) contrast(1.05)}
+.plate .cap{font-family:Caveat,cursive;font-size:19px;color:var(--pencil);
+  padding:5px 8px 8px;line-height:1.15}
+.plate:after,.plate:before{content:"";position:absolute;width:64px;height:22px;background:rgba(216,200,148,.72);
+  border-left:1px solid #0000000f;border-right:1px solid #0000000f;box-shadow:0 1px 3px #0002}
+.plate:before{top:-10px;left:-14px;transform:rotate(-24deg)}
+.plate:after{bottom:16px;right:-16px;transform:rotate(-19deg)}
 
-/* ---------- bottom nav ---------- */
-.nav{position:fixed;bottom:0;left:0;right:0;z-index:60;display:flex;justify-content:center;
-  background:linear-gradient(#0d0b0ac0,#0d0b0a);border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(10px)}
-.nav-in{display:flex;width:100%;max-width:720px}
-.nav button{flex:1;padding:11px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:3px;
-  font-size:10.5px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
-.nav button .g{font-size:19px;line-height:1}
-.nav button.on{color:var(--gold-soft)}
-.nav .dot{position:absolute;transform:translate(14px,-4px);width:7px;height:7px;border-radius:50%;background:var(--blood-soft)}
+/* текст */
+.body{padding:16px 20px 8px}
+.body p{margin:0 0 15px;max-width:62ch}
+.body p.q{font-family:"IBM Plex Mono",monospace;font-size:14.5px;line-height:1.6;
+  border-left:2px solid var(--stamp);padding:2px 0 2px 13px;margin-left:2px;color:var(--ink-2)}
+.body p.q .who{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;
+  letter-spacing:.08em;font-size:12.5px;color:var(--ink);font-weight:600;margin-bottom:3px}
+.body p.note{font-family:Caveat,cursive;font-size:21px;line-height:1.32;color:var(--pencil);
+  border-top:1px dashed #bfae8c;padding-top:8px;transform:rotate(-.35deg)}
 
-/* ---------- sheet ---------- */
-.sheet{position:fixed;inset:0;z-index:80;background:#0a0807f2;backdrop-filter:blur(6px);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;animation:sin .25s}
-@keyframes sin{from{opacity:0;transform:translateY(18px)}}
-.sheet-in{max-width:720px;margin:0 auto;padding:16px 14px calc(100px + env(safe-area-inset-bottom))}
-.sheet-h{display:flex;align-items:baseline;gap:10px;position:sticky;top:0;background:#0a0807;
-  padding:calc(12px + env(safe-area-inset-top)) 0 12px;z-index:2;border-bottom:1px solid var(--line);margin-bottom:14px}
-.sheet-h h2{margin:0;font-size:26px;color:#f0e5d2}
-.sheet-h .x{margin-left:auto;font-size:26px;color:var(--muted);padding:0 6px}
+/* ---------- выборы: полоски-действия ---------- */
+.choices{padding:6px 16px 20px;display:flex;flex-direction:column;gap:9px}
+.ch{position:relative;background:var(--sheet-2);border:1.5px solid var(--ink);
+  padding:11px 13px 11px 40px;display:block;box-shadow:2px 2px 0 var(--ink);transition:.12s}
+.ch:before{content:"";position:absolute;left:13px;top:13px;width:14px;height:14px;
+  border:1.5px solid var(--ink)}
+.ch:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.ch .txt{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.02em;
+  font-size:15px;font-weight:400;line-height:1.25;display:block}
+.ch small{display:block;font-family:"IBM Plex Serif",serif;text-transform:none;letter-spacing:0;
+  font-size:13.5px;color:var(--ink-3);margin-top:4px;line-height:1.4}
+.ch .cost{position:absolute;right:9px;top:8px;font-family:"IBM Plex Mono",monospace;
+  font-size:10px;color:var(--stamp);border:1px solid var(--stamp);padding:0 4px;transform:rotate(2deg)}
+.ch.ev{background:#f6e9cf;border-style:double;border-width:3px}
+.ch.ev:before{background:var(--stamp);border-color:var(--stamp)}
+.ch.locked{opacity:.5;box-shadow:none;border-style:dashed}
+.ch.locked:before{border-style:dashed}
 
-.evi{background:#171210;border:1px solid var(--line);border-left:3px solid var(--gold);
-  border-radius:11px;padding:11px 13px;margin-bottom:9px}
-.evi b{font-family:"Cormorant Garamond",serif;font-size:17.5px;color:#f0e4d0;display:block}
-.evi p{margin:3px 0 0;font-size:14px;color:#b8aa97}
-.evi .tag{display:inline-block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 7px;margin-top:7px;margin-right:5px}
-.evi.new{border-left-color:var(--blood-soft);animation:pulse 1.6s 2}
-@keyframes pulse{50%{background:#231613}}
+/* ---------- список дня ---------- */
+.plan{padding:20px 20px 6px}
+.plan .kick{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--stamp)}
+.plan h2{font-family:Oswald,sans-serif;text-transform:uppercase;font-weight:600;
+  margin:4px 0 6px;font-size:clamp(26px,7.6vw,34px);line-height:1;text-wrap:balance}
+.plan .sub{font-size:15.5px;color:var(--ink-2);max-width:56ch}
+.locs{padding:12px 16px 18px;display:flex;flex-direction:column;gap:8px}
+.loc{position:relative;display:flex;gap:12px;align-items:flex-start;padding:11px 12px 11px 12px;
+  background:var(--sheet-2);border-bottom:1px solid var(--rule);width:100%}
+.loc .no{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-3);padding-top:2px}
+.loc b{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;font-weight:600;
+  font-size:16.5px;letter-spacing:.01em;line-height:1.15}
+.loc span{display:block;font-size:14px;color:var(--ink-3);line-height:1.4;margin-top:2px}
+.loc .mark{margin-left:auto;font-family:Oswald,sans-serif;font-size:10.5px;letter-spacing:.1em;
+  color:var(--ink-3);border:1px solid var(--rule);padding:1px 5px;white-space:nowrap;align-self:center}
+.loc.spent{opacity:.62}
+.loc.spent .mark{color:var(--stamp);border-color:var(--stamp);transform:rotate(-3deg)}
+.loc.spent b{text-decoration:line-through;text-decoration-thickness:1.5px}
 
-.ver{background:#171210;border:1px solid var(--line);border-radius:13px;padding:13px;margin-bottom:11px}
-.ver .vh{display:flex;align-items:baseline;gap:8px}
-.ver b{font-family:"Cormorant Garamond",serif;font-size:18.5px;color:#f0e4d0}
-.ver .pct{margin-left:auto;font-size:13px;color:var(--gold-soft);font-variant-numeric:tabular-nums}
-.bar{height:7px;border-radius:99px;background:#2a2320;margin:9px 0 7px;overflow:hidden}
-.bar i{display:block;height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,1.4,.5,1)}
-.ver p{margin:0;font-size:13.5px;color:#a99b88}
-.ver.dead{opacity:.45}
+/* ---------- штамп-кнопка ---------- */
+.stampbtn{display:block;width:100%;text-align:center;font-family:Oswald,sans-serif;
+  text-transform:uppercase;letter-spacing:.14em;font-weight:600;font-size:17px;
+  color:var(--stamp);border:3px double var(--stamp);padding:13px;background:#0000;
+  transform:rotate(-.7deg);margin:6px 0 12px}
+.stampbtn.ink{color:var(--ink);border-color:var(--ink)}
+.stampbtn:active{transform:rotate(-.7deg) scale(.985)}
+
+/* ---------- нижняя панель: корешки ---------- */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:60;background:var(--manila);
+  border-top:2px solid #00000026;padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:0 -6px 16px rgba(40,30,15,.28)}
+.nav-in{display:flex;max-width:640px;margin:0 auto}
+.nav button{flex:1;padding:10px 2px 9px;font-family:Oswald,sans-serif;text-transform:uppercase;
+  letter-spacing:.09em;font-size:11px;color:var(--ink-3);text-align:center;
+  border-right:1px solid #00000018}
+.nav button:last-child{border-right:none}
+.nav button.on{color:var(--stamp);box-shadow:inset 0 -3px 0 var(--stamp)}
+
+/* ---------- всплывающие листы ---------- */
+.sheet{position:fixed;inset:0;z-index:80;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:#6f5c3ce6;backdrop-filter:blur(3px);animation:sin .22s ease-out}
+@keyframes sin{from{opacity:0;transform:translateY(14px)}}
+.sheet-in{max-width:640px;margin:0 auto;padding:0 12px calc(96px + env(safe-area-inset-bottom))}
+.sheet-h{position:sticky;top:0;z-index:3;background:var(--manila);margin:0 -12px 14px;
+  padding:calc(12px + env(safe-area-inset-top)) 18px 11px;display:flex;align-items:center;gap:10px;
+  border-bottom:2px solid #00000022}
+.sheet-h h2{font-family:Oswald,sans-serif;text-transform:uppercase;font-weight:600;margin:0;
+  font-size:22px;letter-spacing:.04em}
+.sheet-h .x{margin-left:auto;font-family:Oswald,sans-serif;font-size:15px;color:var(--stamp);
+  border:1.5px solid var(--stamp);padding:1px 8px}
+
+/* карточка улики */
+.evi{position:relative;background:var(--sheet);padding:13px 15px 15px;margin-bottom:12px;
+  box-shadow:var(--shadow);
+  background-image:repeating-linear-gradient(180deg,transparent 0 27px,#c9b8941f 27px 28px)}
+.evi:nth-child(odd){transform:rotate(.5deg)}
+.evi:nth-child(even){transform:rotate(-.6deg)}
+.evi b{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;font-weight:600;
+  font-size:17px;line-height:1.12;padding-right:26px}
+.evi p{margin:5px 0 0;font-size:15px;color:var(--ink-2)}
+.evi .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);
+  padding:1px 6px;margin:9px 5px 0 0}
+.evi .pin{position:absolute;right:12px;top:11px;width:11px;height:11px;border-radius:50%;
+  background:var(--stamp);box-shadow:0 2px 4px #0004,inset -2px -2px 0 #0003}
+.evi.new{padding-bottom:34px}
+.evi.new:after{content:"подшито сегодня";position:absolute;right:10px;bottom:8px;font-family:Oswald,sans-serif;
+  font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--stamp);
+  border:1.5px solid var(--stamp);padding:1px 7px;transform:rotate(-3deg);background:var(--sheet)}
+.evi.unknown{background:var(--sheet-2);opacity:.72}
+
+/* версия */
+.ver{background:var(--sheet);padding:13px 15px;margin-bottom:11px;box-shadow:var(--shadow)}
+.ver .vh{display:flex;align-items:baseline;gap:9px}
+.ver b{font-family:Oswald,sans-serif;text-transform:uppercase;font-weight:600;font-size:17.5px}
+.ver .pct{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:13px;
+  font-variant-numeric:tabular-nums;color:var(--stamp)}
+.gauge{height:14px;margin:9px 0 8px;border:1.5px solid var(--ink);position:relative;background:#0000}
+.gauge i{display:block;height:100%;background:repeating-linear-gradient(45deg,var(--ink) 0 3px,transparent 3px 6px);
+  transition:width .6s}
+.ver p{margin:0;font-size:14.5px;color:var(--ink-2)}
+.ver.dead{opacity:.5}
 .ver.dead b{text-decoration:line-through}
 
-/* ---------- title & endings ---------- */
-.title-screen{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding:28px 22px;
-  padding-top:calc(28px + env(safe-area-inset-top))}
-.title-screen .kicker{font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--blood-soft)}
-.title-screen h1{font-size:clamp(40px,13vw,64px);line-height:.95;margin:12px 0 6px;color:#f4ead8;
-  text-shadow:0 6px 40px rgba(0,0,0,.8)}
-.title-screen h1 em{display:block;font-style:normal;color:var(--gold);font-size:.52em;letter-spacing:.02em;margin-top:10px}
-.title-screen .src{color:var(--muted);font-size:13.5px;margin:14px 0 26px;max-width:34em}
-.btn{display:block;width:100%;text-align:center;background:linear-gradient(180deg,#2a2014,#1b1410);
-  border:1px solid var(--gold);color:var(--gold-soft);border-radius:13px;padding:15px;
-  font-family:"Cormorant Garamond",serif;font-size:20px;font-weight:700;letter-spacing:.05em;margin-bottom:10px}
-.btn.ghost{border-color:var(--line);color:var(--muted);background:#141110;font-size:16px;padding:12px}
-.btn:active{transform:scale(.99)}
-.warn{border:1px solid #4a2620;background:#1a100e;border-radius:12px;padding:11px 13px;
-  color:#c9a79c;font-size:13px;margin-bottom:22px}
+/* ---------- обложка дела ---------- */
+.cover{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;padding:16px 12px;
+  padding-top:calc(16px + env(safe-area-inset-top))}
+.folder{background:var(--manila);padding:26px 22px 24px;box-shadow:0 20px 44px rgba(30,20,8,.45);
+  background-image:repeating-linear-gradient(91deg,rgba(0,0,0,.03) 0 1px,transparent 1px 6px);
+  border-top:14px solid #d3c4a2;position:relative}
+.folder .no{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.2em;color:var(--ink-3);
+  text-transform:uppercase}
+.folder h1{font-family:"Ruslan Display",Impact,serif;font-size:clamp(33px,10.5vw,54px);line-height:.94;
+  margin:12px 0 4px;letter-spacing:-.01em;text-wrap:balance}
+.folder h1 em{font-style:normal;color:var(--stamp)}
+.folder .lede{font-size:16px;color:var(--ink-2);margin:14px 0 0;max-width:48ch}
+.folder .meta{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;margin:18px 0 0;
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--ink-2)}
+.folder .meta dt{color:var(--ink-3);text-transform:uppercase;letter-spacing:.09em;font-size:10.5px;padding-top:3px}
+.folder .meta dd{margin:0}
+.age{position:absolute;right:14px;top:-6px;font-family:Oswald,sans-serif;font-weight:600;font-size:16px;
+  letter-spacing:.1em;color:var(--stamp);border:3px double var(--stamp);padding:5px 9px;
+  transform:rotate(9deg);background:#e3d7bbcc}
+.cover .after{margin-top:16px;padding:16px 18px}
+.cover .after h3{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;
+  font-size:12.5px;margin:0 0 8px;color:var(--stamp)}
+.cover .after p{margin:0 0 10px;font-size:15px;color:var(--ink-2)}
+.cover .after p:last-child{margin-bottom:0}
 
-.end-card{text-align:center;padding:26px 18px}
-.end-card .rank{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--blood-soft)}
-.end-card h1{font-size:clamp(32px,10vw,48px);margin:10px 0 14px;color:#f4ead8;line-height:1.02}
-.end-card .txt{text-align:left;font-size:16px;color:#d6cab8}
-.end-card .txt p{margin:0 0 14px}
-.stat{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:8px 0;font-size:14px}
-.stat span:last-child{color:var(--gold-soft)}
-.fade{animation:fu .45s}
-@keyframes fu{from{opacity:0;transform:translateY(12px)}}
-.hr{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:20px 0}
-.smallcaps{font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+/* ---------- развязка ---------- */
+.verdict{padding:24px 20px 26px}
+.verdict .band{font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.16em;
+  font-size:12px;color:var(--stamp)}
+.verdict h1{font-family:"Ruslan Display",Impact,serif;font-size:clamp(30px,9vw,46px);line-height:.98;
+  margin:8px 0 16px;text-wrap:balance}
+.verdict .txt p{margin:0 0 15px;max-width:62ch}
+.ledger{margin:18px 0 0;border-top:2px solid var(--ink)}
+.ledger div{display:flex;justify-content:space-between;gap:12px;padding:7px 0;
+  border-bottom:1px solid var(--rule);font-family:"IBM Plex Mono",monospace;font-size:13px}
+.ledger span:last-child{color:var(--stamp);text-align:right}
+.afterword{font-size:14.5px;color:var(--ink-2);border-left:3px solid var(--kraft);padding-left:13px;margin-top:18px}
+.bigstamp{display:inline-block;font-family:Oswald,sans-serif;font-weight:600;letter-spacing:.14em;
+  color:var(--stamp);border:4px double var(--stamp);padding:8px 14px;transform:rotate(-5deg);
+  font-size:19px;margin:4px 0 14px;text-transform:uppercase}
+.bigstamp.grey{color:var(--ink-3);border-color:var(--ink-3)}
+
+/* ---------- уведомление об улике ---------- */
+#toasts{position:fixed;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom));z-index:90;
+  display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 12px}
+.toast{background:var(--sheet);max-width:520px;width:100%;padding:11px 14px;
+  border-left:5px solid var(--stamp);box-shadow:0 12px 26px rgba(30,20,8,.45);
+  transform:rotate(-.6deg);animation:tin .3s}
+.toast b{display:block;font-family:Oswald,sans-serif;text-transform:uppercase;font-size:14px;letter-spacing:.05em}
+.toast p{margin:2px 0 0;font-size:13.5px;color:var(--ink-2);line-height:1.4}
+@keyframes tin{from{opacity:0;transform:translateY(12px) rotate(-.6deg)}}
+.fade{animation:fu .35s}
+@keyframes fu{from{opacity:0;transform:translateY(9px)}}
+.mini{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3)}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toasts"></div>
-<div class="nav" id="nav" style="display:none"><div class="nav-in">
-  <button data-n="hub"><span class="g">🕯️</span>Дело</button>
-  <button data-n="evi"><span class="g">🗂️</span>Улики</button>
-  <button data-n="ver"><span class="g">⚖️</span>Версии</button>
-  <button data-n="who"><span class="g">👤</span>Лица</button>
-  <button data-n="menu"><span class="g">☰</span>Меню</button>
-</div></div>
+<div class="nav" id="nav" style="display:none"><div class="nav-in"><button data-n="hub">Дело</button><button data-n="evi">Улики</button><button data-n="ver">Версии</button><button data-n="who">Лица</button><button data-n="menu">Ещё</button></div></div>
 <script>
 "use strict";
 /* =========================================================================
@@ -190,89 +277,161 @@ h1,h2,h3,.serif{font-family:"Cormorant Garamond",Georgia,serif}
    достояние). Текст, механики, развилки и концовки написаны для этой игры.
    ========================================================================= */
 
-/* ---------- ИЛЛЮСТРАЦИИ -------------------------------------------------
-   Каждая сцена получает гравюрную SVG-иллюстрацию, отрисованную в браузере.
-   Если включён показ архивных фотографий и удалённый файл доступен — он
-   подставляется поверх; при любой ошибке загрузки остаётся гравюра.        */
-const P = {
-  night:['#0a0c14','#141a26','#243043'], gas:['#120e08','#231a10','#3c2c17'],
-  blood:['#140a09','#241010','#3d1a16'], cold:['#0b0f0f','#141c1c','#22302f'],
-  dawn:['#160f0c','#2a1a12','#4a2a1c']
-};
-function svgArt(motif,pal){
-  const c=P[pal]||P.gas, R=(a,b)=>Math.random()*(b-a)+a;
-  let fog='',stars='',lamps='',main='';
-  for(let i=0;i<7;i++){const y=120+i*22, o=(.05+i*.012).toFixed(3);
-    fog+=`<ellipse cx="${(30+i*63)%420}" cy="${y}" rx="${140+i*18}" ry="${16+i*3}" fill="#cbb894" opacity="${o}"/>`;}
-  const glow=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="url(#gl)"/>`;
-  const lamp=(x,h)=>`<rect x="${x-1.6}" y="${225-h}" width="3.2" height="${h}" fill="#0b0908"/>`+
-    `<rect x="${x-6}" y="${218-h}" width="12" height="13" rx="2" fill="#0b0908"/>`+
-    `<rect x="${x-4}" y="${220-h}" width="8" height="9" fill="#f3d68a" opacity=".92"/>`+glow(x,224-h,42);
-  const fig=(x,y,s,c2='#080606')=>`<g transform="translate(${x},${y}) scale(${s})" fill="${c2}">`+
-    `<circle cx="0" cy="-34" r="7.5"/><path d="M-11 -27 h22 l6 26 -8 3 -3 -14 v30 h-12 v-30 l-3 14 -8 -3z"/>`+
-    `<path d="M-10 32 h20 l3 12 h-26z"/></g>`;
-  switch(motif){
-    case 'cab': main=lamp(60,58)+lamp(360,44)+
-      `<g fill="#070606"><circle cx="196" cy="196" r="34" fill="none" stroke="#070606" stroke-width="5"/>`+
-      `<circle cx="196" cy="196" r="6"/><path d="M150 196 h92 M196 162 v68 M166 172 l60 48 M226 172 l-60 48" stroke="#070606" stroke-width="2.5"/>`+
-      `<path d="M150 190 q-4 -70 62 -74 q64 4 60 74 z"/><path d="M262 150 q34 -6 44 30 l-30 12z"/>`+
-      `<path d="M110 196 h44 M300 178 l38 26" stroke="#070606" stroke-width="4"/></g>`+
-      `<g fill="#0a0807"><path d="M330 200 q10 -46 34 -50 q10 22 6 50z"/><path d="M352 152 q16 -18 30 4 l-8 10z"/>`+
-      `<rect x="336" y="196" width="46" height="8"/></g>`+fig(96,176,.9); break;
-    case 'body': main=`<rect x="52" y="150" width="316" height="14" rx="3" fill="#161210"/>`+
-      `<path d="M60 150 q40 -26 100 -22 q60 4 80 8 q54 6 96 14z" fill="#cbbca4" opacity=".9"/>`+
-      `<path d="M62 150 q40 -26 100 -22 q60 4 80 8 q54 6 96 14z" fill="none" stroke="#8d7f6a" stroke-width="1"/>`+
-      lamp(84,96)+glow(210,120,120)+fig(330,152,.85); break;
-    case 'slum': {let w='';for(let i=0;i<6;i++){const x=14+i*68,h=88+((i*37)%54);
-        w+=`<rect x="${x}" y="${200-h}" width="58" height="${h}" fill="#0a0808"/>`;
-        for(let j=0;j<3;j++){if((i+j)%2)w+=`<rect x="${x+9+ (j%2)*26}" y="${208-h+j*26}" width="15" height="19" fill="#e8c476" opacity=".${5+j}"/>`;}}
-      main=w+lamp(200,50)+fig(150,208,.75)+fig(268,206,.62)+`<path d="M0 214 h420" stroke="#0a0808" stroke-width="14"/>`;break;}
-    case 'mansion': main=`<rect x="90" y="86" width="240" height="120" fill="#0a0908"/>`+
-      `<path d="M78 88 L210 30 L342 88z" fill="#0a0908"/>`+
-      [0,1,2,3].map(i=>`<rect x="${112+i*52}" y="106" width="30" height="42" fill="#f0cd82" opacity=".8"/>`).join('')+
-      `<rect x="188" y="156" width="44" height="50" fill="#e8c476" opacity=".55"/>`+
-      [0,1,2,3,4].map(i=>`<rect x="${104+i*52}" y="150" width="9" height="56" fill="#080707"/>`).join('')+
-      glow(210,126,150)+fig(60,212,.8); break;
-    case 'pub': main=`<rect x="30" y="60" width="360" height="150" fill="#0b0908"/>`+
-      `<rect x="58" y="92" width="120" height="76" fill="#eab95c" opacity=".72"/>`+
-      `<rect x="242" y="92" width="120" height="76" fill="#eab95c" opacity=".55"/>`+
-      fig(118,168,.95)+fig(300,170,.85)+`<rect x="186" y="96" width="50" height="114" fill="#141010"/>`+
-      `<circle cx="211" cy="150" r="7" fill="#c9a227"/>`+glow(118,120,70); break;
-    case 'court': main=`<rect x="40" y="150" width="340" height="70" fill="#0b0908"/>`+
-      [0,1,2,3,4].map(i=>`<rect x="${58+i*70}" y="70" width="18" height="82" fill="#0d0b0a"/>`).join('')+
-      `<rect x="40" y="58" width="340" height="14" fill="#0d0b0a"/>`+glow(210,110,140)+
-      fig(210,178,1.05)+fig(96,182,.7)+fig(324,182,.7); break;
-    case 'docks': main=`<path d="M0 176 h420 v70 H0z" fill="#0a0d10"/>`+
-      `<g fill="#080a0c"><path d="M120 176 l24 -110 4 110z"/><path d="M118 96 h60 v6 h-60z"/>`+
-      `<path d="M240 176 l18 -84 3 84z"/><path d="M238 112 h44 v5 h-44z"/></g>`+
-      `<path d="M40 176 q60 -22 120 0 q60 22 120 0 q60 -22 120 0" fill="none" stroke="#243043" stroke-width="2" opacity=".7"/>`+
-      lamp(346,40)+fig(70,196,.8); break;
-    case 'room': main=`<rect x="52" y="52" width="316" height="158" fill="#0c0a09"/>`+
-      `<rect x="76" y="76" width="88" height="104" fill="#e8c476" opacity=".28"/>`+
-      `<rect x="212" y="118" width="132" height="14" fill="#100d0c"/><rect x="222" y="132" width="8" height="48" fill="#100d0c"/>`+
-      `<rect x="326" y="132" width="8" height="48" fill="#100d0c"/>`+
-      `<rect x="250" y="96" width="34" height="24" fill="#161210"/>`+glow(120,120,90)+fig(300,196,.55); break;
-    case 'church': main=`<path d="M186 40 h12 v22 h20 v14 h-20 v134 h-12 V76 h-20 V62 h20z" fill="#0a0908"/>`+
-      `<rect x="120" y="120" width="150" height="90" fill="#0a0908"/>`+
-      `<path d="M120 120 q75 -46 150 0z" fill="#0a0908"/>`+glow(196,120,130)+
-      fig(300,206,.7)+fig(96,206,.6); break;
-    case 'fire': main=`<rect x="120" y="130" width="180" height="80" fill="#0b0908"/>`+
-      `<path d="M170 200 q-16 -46 22 -70 q-6 26 16 34 q18 -14 12 -38 q34 30 20 74z" fill="#d9762b" opacity=".9"/>`+
-      `<path d="M186 200 q-8 -26 14 -40 q-2 16 10 20 q10 -8 6 -22 q20 18 12 42z" fill="#f5c451"/>`+
-      glow(210,176,140)+fig(76,206,.85)+fig(340,206,.85); break;
-    default: main=lamp(96,60)+lamp(320,48)+fig(210,204,1)+`<path d="M0 216 h420" stroke="#0a0808" stroke-width="16"/>`;
-  }
-  for(let i=0;i<26;i++) stars+=`<circle cx="${R(0,420).toFixed(0)}" cy="${R(4,90).toFixed(0)}" r="${R(.4,1.1).toFixed(2)}" fill="#dcd0b4" opacity="${R(.1,.45).toFixed(2)}"/>`;
-  return `<svg viewBox="0 0 420 236" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-  <defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="${c[0]}"/><stop offset=".55" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient>
-    <radialGradient id="gl"><stop offset="0" stop-color="#ffdf9a" stop-opacity=".55"/><stop offset="1" stop-color="#ffdf9a" stop-opacity="0"/></radialGradient>
-    <filter id="gr"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3"/>
-      <feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".14"/></feComponentTransfer></filter></defs>
-  <rect width="420" height="236" fill="url(#sk)"/>${stars}${fog}${lamps}${main}
-  <rect width="420" height="236" filter="url(#gr)" opacity=".55"/></svg>`;
-}
+/* ---------- РИСОВКА ------------------------------------------------------
+   Иллюстрации рисуются пером: дрожащая линия, штриховка, одно красное пятно
+   на кадр. Зерно детерминировано мотивом — рисунок не пляшет при перерисовке. */
+function seed(str){let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return function(){h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);
+    return ((t^t>>>14)>>>0)/4294967296}}
+const INK='#1b1815', RED='#b4271e';
 
+/* дрожащая линия по опорным точкам */
+function pen(pts,rnd,amp){
+  amp=amp||1.15;let d='';
+  for(let i=0;i<pts.length;i++){
+    const[x,y]=pts[i], jx=x+(rnd()-.5)*amp, jy=y+(rnd()-.5)*amp;
+    if(!i){d+='M'+jx.toFixed(1)+' '+jy.toFixed(1)}
+    else{const[px,py]=pts[i-1], cx=(px+x)/2+(rnd()-.5)*amp*2.4, cy=(py+y)/2+(rnd()-.5)*amp*2.4;
+      d+='Q'+cx.toFixed(1)+' '+cy.toFixed(1)+' '+jx.toFixed(1)+' '+jy.toFixed(1)}}
+  return d;
+}
+function stroke(pts,rnd,w,amp,close){
+  return '<path d="'+pen(pts,rnd,amp)+(close?'z':'')+'" fill="none" stroke="'+INK+
+    '" stroke-width="'+(w||1.6)+'" stroke-linecap="round" stroke-linejoin="round"/>';
+}
+function fill(pts,rnd,c,amp){return '<path d="'+pen(pts,rnd,amp||.9)+'z" fill="'+(c||INK)+'"/>';}
+/* штриховка внутри прямоугольника */
+function hatch(x,y,w,h,gap,rnd,ang,op){
+  let o='',n=Math.ceil((w+h)/gap);const id='c'+Math.floor(rnd()*1e6);
+  for(let i=0;i<n;i++){const off=i*gap-h;
+    o+=stroke(ang<0?[[x+off,y+h],[x+off+h,y]]:[[x+off,y],[x+off+h,y+h]],rnd,.85,1.1);}
+  return '<clipPath id="'+id+'"><rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'"/></clipPath>'+
+    '<g clip-path="url(#'+id+')" opacity="'+(op||.5)+'">'+o+'</g>';
+}
+/* фигура человека в шляпе и пальто */
+function man(x,y,s,rnd,red){
+  const g=(a,b)=>[x+a*s,y+b*s];
+  return '<g>'+
+   fill([g(-7,-34),g(7,-34),g(8,-30),g(-8,-30)],rnd)+            /* поля шляпы */
+   fill([g(-5,-44),g(5,-44),g(5,-34),g(-5,-34)],rnd)+            /* тулья */
+   stroke([g(-6,-30),g(-4,-24),g(4,-24),g(6,-30)],rnd,1.5)+      /* лицо-тень */
+   fill([g(-11,-24),g(11,-24),g(13,6),g(-13,6)],rnd)+            /* пальто */
+   stroke([g(0,-22),g(0,4)],rnd,1)+
+   stroke([g(-13,6),g(-10,26)],rnd,2)+stroke([g(13,6),g(10,26)],rnd,2)+
+   (red?'<path d="'+pen([g(-7,-25),g(0,-21),g(7,-25)],rnd,1)+'" fill="none" stroke="'+RED+'" stroke-width="3.4" stroke-linecap="round"/>':'')+
+   '</g>';
+}
+function lamp(x,g,rnd){
+  return stroke([[x,236],[x,236-g]],rnd,2.4)+
+   fill([[x-8,236-g],[x+8,236-g],[x+6,236-g-16],[x-6,236-g-16]],rnd)+
+   '<circle cx="'+x+'" cy="'+(236-g-9)+'" r="4.5" fill="#f6efdd" stroke="'+INK+'" stroke-width="1.2"/>'+
+   stroke([[x-9,236-g-16],[x,236-g-25],[x+9,236-g-16]],rnd,1.6);
+}
+function svgArt(motif,pal){
+  const rnd=seed(motif+'|'+pal); let m='';
+  const ground=stroke([[0,214],[110,211],[240,215],[420,212]],rnd,2.6);
+  switch(motif){
+    case 'cab': /* кэб, лошадь, фонарь */
+      m=hatch(0,120,420,96,13,rnd,1,.16)+ground+
+        '<g>'+stroke([[132,214],[132,150],[150,116],[236,112],[258,150],[258,214]],rnd,2.2)+
+        fill([[136,146],[152,118],[234,115],[254,148]],rnd)+
+        stroke([[150,150],[240,148]],rnd,1.4)+
+        '<circle cx="150" cy="203" r="26" fill="none" stroke="'+INK+'" stroke-width="2.4"/>'+
+        '<circle cx="150" cy="203" r="4" fill="'+INK+'"/>'+
+        stroke([[128,190],[172,216]],rnd,1)+stroke([[172,190],[128,216]],rnd,1)+
+        stroke([[124,203],[176,203]],rnd,1)+stroke([[150,177],[150,229]],rnd,1)+
+        '<circle cx="244" cy="205" r="20" fill="none" stroke="'+INK+'" stroke-width="2.2"/>'+
+        stroke([[258,140],[286,132],[292,152]],rnd,2)+ /* козлы */
+        '</g>'+
+        '<g>'+fill([[300,206],[306,150],[330,140],[352,152],[356,206],[344,206],[340,168],[316,170],[314,206]],rnd)+
+        fill([[330,140],[352,124],[368,118],[372,132],[356,148]],rnd)+
+        stroke([[366,120],[374,112]],rnd,1.4)+'</g>'+
+        lamp(56,64,rnd)+man(96,214,.92,rnd,true);
+      break;
+    case 'body': /* стол, простыня, склянка */
+      m=hatch(0,60,420,80,15,rnd,-1,.13)+
+        fill([[46,166],[374,163],[376,176],[44,178]],rnd)+
+        stroke([[62,178],[66,220]],rnd,2.2)+stroke([[356,176],[352,220]],rnd,2.2)+
+        stroke([[54,163],[110,140],[186,133],[262,139],[330,152],[374,162]],rnd,2.4)+
+        hatch(54,133,320,32,11,rnd,1,.3)+
+        stroke([[186,133],[190,163]],rnd,1)+stroke([[262,139],[258,164]],rnd,1)+
+        stroke([[300,120],[300,100],[292,96],[292,80],[310,80],[310,96],[302,100]],rnd,1.6)+
+        '<path d="'+pen([[293,108],[309,108],[309,120],[293,120]],rnd,.8)+'z" fill="'+RED+'" opacity=".8"/>'+
+        man(392,214,.7,rnd,false)+ground;
+      break;
+    case 'slum':{ /* переулок */
+      let hs='';for(let i=0;i<5;i++){const x=6+i*84,h=104+((i*53)%50);
+        hs+=fill([[x,214],[x,214-h],[x+70,208-h],[x+70,214]],rnd,'#1b1815')+
+            '<g fill="#f6efdd">'+[0,1,2].map(j=>'<rect x="'+(x+10+(j%2)*34)+'" y="'+(224-h+j*30)+'" width="18" height="22" transform="rotate('+((rnd()-.5)*2).toFixed(1)+' '+(x+18)+' '+(230-h)+')"/>').join('')+'</g>';}
+      m=hs+ground+lamp(210,58,rnd)+man(146,216,.78,rnd,true)+man(282,214,.66,rnd,false)+
+        hatch(0,150,420,66,10,rnd,-1,.2);break;}
+    case 'mansion':
+      m=fill([[92,206],[92,96],[330,96],[330,206]],rnd)+
+        fill([[74,98],[211,34],[348,98]],rnd)+
+        '<g fill="#f6efdd">'+[0,1,2,3].map(i=>'<rect x="'+(112+i*54)+'" y="112" width="30" height="40"/>').join('')+
+        '<rect x="192" y="164" width="40" height="42"/></g>'+
+        stroke([[112,112],[142,152]],rnd,1)+stroke([[220,112],[250,152]],rnd,1)+
+        hatch(92,96,238,110,16,rnd,1,.14)+ground+man(52,216,.8,rnd,false)+
+        '<path d="'+pen([[204,178],[220,178],[220,206],[204,206]],rnd,.7)+'z" fill="'+RED+'" opacity=".55"/>';
+      break;
+    case 'pub':
+      m=fill([[24,204],[24,58],[396,58],[396,204]],rnd)+
+        '<g fill="#f6efdd"><rect x="52" y="86" width="118" height="74"/><rect x="250" y="86" width="118" height="74"/></g>'+
+        hatch(52,86,118,74,9,rnd,1,.22)+
+        fill([[186,84],[236,84],[236,204],[186,204]],rnd)+
+        '<circle cx="211" cy="146" r="7" fill="'+RED+'"/>'+
+        stroke([[150,44],[150,64]],rnd,2)+
+        '<path d="'+pen([[118,30],[186,26],[188,52],[120,56]],rnd,1)+'z" fill="'+RED+'" opacity=".85"/>'+
+        man(110,204,.9,rnd,false)+man(300,206,.8,rnd,true)+ground;
+      break;
+    case 'court':
+      m=hatch(0,40,420,110,17,rnd,-1,.12)+
+        [0,1,2,3,4].map(i=>fill([[52+i*74,66],[70+i*74,66],[70+i*74,168],[52+i*74,168]],rnd)).join('')+
+        fill([[36,50],[384,46],[384,64],[36,66]],rnd)+
+        fill([[120,168],[300,166],[306,206],[114,206]],rnd)+
+        '<path d="'+pen([[196,178],[228,178],[228,198],[196,198]],rnd,.8)+'z" fill="'+RED+'" opacity=".7"/>'+
+        man(210,168,.86,rnd,false)+ground;
+      break;
+    case 'room':
+      m=fill([[40,44],[40,196],[380,196],[380,44]],rnd)+
+        '<g fill="#f6efdd"><rect x="66" y="70" width="86" height="100"/></g>'+hatch(66,70,86,100,8,rnd,1,.2)+
+        fill([[212,124],[350,120],[352,134],[210,138]],rnd)+
+        stroke([[220,138],[222,190]],rnd,2)+stroke([[342,134],[340,190]],rnd,2)+
+        fill([[248,96],[292,94],[294,122],[246,124]],rnd)+
+        '<path d="'+pen([[254,100],[286,99],[287,116],[253,117]],rnd,.7)+'z" fill="#f6efdd"/>'+
+        '<path d="'+pen([[300,104],[326,103],[327,122],[301,123]],rnd,.8)+'z" fill="'+RED+'" opacity=".8"/>'+
+        man(360,196,.6,rnd,false)+ground;
+      break;
+    case 'church':
+      m=fill([[188,30],[202,30],[202,58],[224,58],[224,72],[202,72],[202,196],[188,196],[188,72],[166,72],[166,58],[188,58]],rnd)+
+        fill([[120,196],[120,116],[270,116],[270,196]],rnd)+
+        fill([[112,118],[195,72],[278,118]],rnd)+
+        '<g fill="#f6efdd"><rect x="150" y="140" width="26" height="40"/><rect x="216" y="140" width="26" height="40"/></g>'+
+        hatch(120,116,150,80,14,rnd,1,.14)+
+        '<circle cx="195" cy="96" r="9" fill="'+RED+'" opacity=".75"/>'+
+        ground+man(320,212,.72,rnd,false)+man(76,212,.6,rnd,true);
+      break;
+    case 'fire':
+      m=fill([[110,196],[110,110],[310,110],[310,196]],rnd)+
+        '<g fill="#f6efdd"><rect x="146" y="134" width="128" height="62"/></g>'+
+        '<path d="'+pen([[176,196],[168,158],[196,128],[190,156],[212,146],[206,122],[234,150],[240,196]],rnd,1.4)+'z" fill="'+RED+'"/>'+
+        '<path d="'+pen([[192,196],[188,168],[206,150],[202,170],[218,164],[224,196]],rnd,1)+'z" fill="#f6efdd" opacity=".8"/>'+
+        hatch(110,110,200,86,15,rnd,-1,.12)+ground+man(70,212,.82,rnd,false)+man(348,212,.8,rnd,true);
+      break;
+    case 'docks':
+      m=hatch(0,150,420,64,9,rnd,1,.18)+
+        stroke([[120,196],[144,72],[150,196]],rnd,2.2)+stroke([[112,84],[182,80]],rnd,1.8)+
+        stroke([[244,196],[262,100],[266,196]],rnd,2)+stroke([[238,110],[288,107]],rnd,1.6)+
+        stroke([[20,182],[92,176],[164,184],[236,176],[308,184],[400,178]],rnd,1.6)+
+        '<path d="'+pen([[300,150],[330,148],[330,164],[300,166]],rnd,.9)+'z" fill="'+RED+'" opacity=".7"/>'+
+        lamp(356,44,rnd)+man(64,206,.78,rnd,false)+ground;
+      break;
+    default:
+      m=hatch(0,120,420,96,14,rnd,1,.14)+lamp(96,62,rnd)+lamp(322,50,rnd)+man(210,212,1,rnd,true)+ground;
+  }
+  return '<svg viewBox="0 0 420 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">'+
+    '<rect width="420" height="236" fill="#faf4e6"/>'+m+'</svg>';
+}
 
 /* Архивные фотографии и гравюры XIX века (Wikimedia Commons, общественное
    достояние). Подставляются поверх гравюры; при любой ошибке загрузки или
@@ -935,18 +1094,18 @@ function blank(){return {day:0,hours:0,visited:{},ev:{},flags:{},scene:null,seen
 function save(){try{localStorage.setItem(SAVE,JSON.stringify(S))}catch(e){}}
 function load(){try{const r=localStorage.getItem(SAVE);return r?JSON.parse(r):null}catch(e){return null}}
 function hasSave(){const s=load();return s&&s.started&&!s.endKey;}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 function toast(title,msg){
   const t=document.createElement('div');t.className='toast';
-  t.innerHTML='<b>'+title+'</b><p>'+msg+'</p>';
+  t.innerHTML='<b>'+esc(title)+'</b><p>'+esc(msg)+'</p>';
   document.getElementById('toasts').appendChild(t);
-  setTimeout(()=>{t.style.transition='.4s';t.style.opacity=0;t.style.transform='translateY(10px)';
-    setTimeout(()=>t.remove(),420)},2600);
+  setTimeout(()=>{t.style.transition='.4s';t.style.opacity=0;setTimeout(()=>t.remove(),420)},2700);
 }
 function addEv(id){
   if(!EV[id]||S.ev[id])return;
   S.ev[id]=1;S.seenEv[id]=0;
-  toast('Новая улика: '+EV[id].n, EV[id].d.slice(0,96)+'…');
+  toast('В дело подшито: '+EV[id].n, EV[id].d.slice(0,92)+'…');
 }
 function scores(){
   const sc={};Object.keys(VERS).forEach(k=>sc[k]=0);
@@ -954,39 +1113,34 @@ function scores(){
   return sc;
 }
 function pct(sc){
-  const vals=Object.values(sc),max=Math.max(6,...vals.map(v=>Math.abs(v)));
+  const max=Math.max(6,...Object.values(sc).map(v=>Math.abs(v)));
   const o={};for(const k in sc)o[k]=Math.max(0,Math.min(100,Math.round(sc[k]/max*100)));return o;
 }
-function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 
-/* ---- иллюстрация с попыткой архивного фото и гравюрой как основой ---- */
-function illus(motif,pal,ttl,loc){
+/* иллюстрация: перьевой рисунок, поверх — архивное фото, если доступно */
+function illus(motif,pal,cap){
   let ph='';
   if(S&&S.flags&&S.flags.photos!=='off'&&PHOTO[motif]){
-    ph='<img alt="" loading="lazy" style="position:absolute;inset:0;opacity:0;transition:opacity .6s;'+
-       'mix-blend-mode:luminosity;filter:sepia(.35) contrast(1.12) brightness(.72)" src="'+PHOTO_URL(PHOTO[motif])+'"'+
-       ' onload="this.style.opacity=.82" onerror="this.remove()">';
+    ph='<img class="ph" alt="" loading="lazy" src="'+PHOTO_URL(PHOTO[motif])+'"'+
+       ' onload="this.style.opacity=.62" onerror="this.remove()">';
   }
-  return '<div class="illus">'+svgArt(motif,pal)+ph+
-    '<div class="cap"><span>'+esc(loc)+'</span><b>'+esc(ttl)+'</b></div></div>';
+  return '<figure class="plate"><div class="in">'+svgArt(motif,pal)+ph+
+    '</div><figcaption class="cap">'+esc(cap)+'</figcaption></figure>';
 }
 
 /* ---------------- переходы ---------------- */
 function go(target){
-  if(target==='HUB'){S.scene=null;afterHub();}
-  else if(target==='NEXTDAY'){nextDay();}
+  if(target==='HUB'){S.scene=null;if(S.hours<=0)S.scene='d'+DAYS[S.day].n+'_end';}
+  else if(target==='NEXTDAY'){nextDay();return;}
   else if(target==='FINALE'){S.scene='__final';}
   else S.scene=target;
   save();render();window.scrollTo({top:0,behavior:'smooth'});
 }
-function afterHub(){
-  const d=DAYS[S.day];
-  if(S.hours<=0){S.scene='d'+d.n+'_end';}
-}
 function nextDay(){
   S.day++;
-  if(S.day>=DAYS.length){S.scene='__final';save();render();return;}
-  S.hours=DAYS[S.day].hours;S.visited={};S.scene=DAYS[S.day].intro;save();render();
+  if(S.day>=DAYS.length){S.scene='__final';save();render();window.scrollTo(0,0);return;}
+  S.hours=DAYS[S.day].hours;S.visited={};S.scene=DAYS[S.day].intro;
+  save();render();window.scrollTo(0,0);
 }
 function choose(ch){
   if(ch.need&&!S.ev[ch.need])return;
@@ -1005,55 +1159,76 @@ function visit(loc){
 
 /* ---------------- отрисовка ---------------- */
 function render(){
-  nav.style.display=(S&&S.started&&!S.endKey&&S.scene!=='__final')?'flex':'none';
-  if(!S||!S.started){app.innerHTML=titleScreen();bindTitle();return;}
+  nav.style.display=(S&&S.started&&!S.endKey&&S.scene!=='__final')?'block':'none';
+  if(!S||!S.started){app.innerHTML=coverScreen();bindCover();return;}
   if(S.endKey){app.innerHTML=endScreen();bindEnd();return;}
   if(S.scene==='__final'){app.innerHTML=topBar()+finaleScreen();bindFinale();return;}
   app.innerHTML=topBar()+(S.scene?sceneScreen(S.scene):hubScreen());
   bindMain();
   if(sheet)openSheet(sheet,true);
 }
-function titleScreen(){
-  return '<div class="title-screen fade">'+
-   '<div class="kicker">Мельбурн · 1886 · пять дней следствия</div>'+
-   '<h1>Тайна<br>двухколёсного<em>экипажа</em></h1>'+
-   '<p class="src">Интерактивное расследование по забытому бестселлеру Фергюса Хьюма (1886) — роману, который в своё время продавался лучше первой книги о Шерлоке Холмсе. Вы — следователь. У вас пять дней, ограниченное время каждый день и начальник, которому имя виновного нужнее правды.</p>'+
-   '<div class="warn"><b>18+.</b> Убийство, шантаж, двоежёнство, трущобы, детская подмена, самоубийство. Без графических сцен, но всерьёз.</div>'+
-   (hasSave()?'<button class="btn" id="cont">Продолжить расследование</button>':'')+
-   '<button class="btn'+(hasSave()?' ghost':'')+'" id="newg">Новое расследование</button>'+
-   '<div class="hr"></div><div class="smallcaps">Как это работает</div>'+
-   '<p class="src" style="margin-top:8px">Каждый день вы успеваете посетить лишь часть мест — время ограничено, и увиденного вами не увидит никто другой. Улики сами по себе ничего не значат: они лишь двигают вес пяти версий. На пятый день вы назовёте одно имя, и город будет считать это правдой. Концовок семь.</p></div>';
+
+/* --- обложка дела --- */
+function coverScreen(){
+  return '<div class="cover fade"><div class="folder">'+
+   '<div class="age">18+</div>'+
+   '<div class="no">Дело № 1886/14 · Полицейское управление Виктории</div>'+
+   '<h1>Дело о двухколёсном <em>экипаже</em></h1>'+
+   '<p class="lede">Мельбурн, июль. Кэбмен привёз в участок пассажира, который не сошёл на своей остановке. Ни раны, ни крови, ни бумажника. Вы ведёте следствие. У вас пять дней — и начальник, которому имя нужнее правды.</p>'+
+   '<dl class="meta">'+
+     '<dt>Потерпевший</dt><dd>Оливер Уайт, 28 лет, приезжий из Лондона</dd>'+
+     '<dt>Причина</dt><dd>Отравление хлороформом, установлено при вскрытии</dd>'+
+     '<dt>Срок</dt><dd>Пять суток до передачи дела прокурору</dd>'+
+     '<dt>Содержит</dt><dd>Шантаж, двоежёнство, трущобы, самоубийство</dd>'+
+   '</dl></div>'+
+   (hasSave()?'<button class="stampbtn" id="cont">Вернуться к делу</button>':'')+
+   '<button class="stampbtn'+(hasSave()?' ink':'')+'" id="newg">Вскрыть дело</button>'+
+   '<div class="paper after">'+
+     '<h3>Как ведётся следствие</h3>'+
+     '<p>Каждый день вы успеваете обойти лишь часть адресов — времени всегда меньше, чем мест. Что пропустили, того не узнает никто.</p>'+
+     '<p>Улики сами по себе ничего не доказывают: они лишь перевешивают чашу одной из пяти версий. Часть вопросов задать невозможно, пока нужной бумаги нет у вас в папке.</p>'+
+     '<p>На пятый день вы назовёте одно имя, и город будет считать это правдой. Развязок семь, и в шести из них кто-нибудь платит не по счёту.</p>'+
+     '<p class="mini" style="margin-top:14px">По роману Фергюса Хьюма 1886 года — забытому бестселлеру, который тогда обгонял в продажах первую повесть о Шерлоке Холмсе. Сюжетная канва и персонажи взяты из книги; все тексты и развилки написаны для этой игры.</p>'+
+   '</div></div>';
 }
-function bindTitle(){
+function bindCover(){
   const c=document.getElementById('cont'),n=document.getElementById('newg');
   if(c)c.onclick=()=>{S=load();render()};
   n.onclick=()=>{S=blank();S.started=true;S.day=0;S.hours=DAYS[0].hours;S.scene=DAYS[0].intro;save();render()};
 }
+
+/* --- язычок папки --- */
 function topBar(){
-  const d=DAYS[S.day],total=DAYS.reduce((a,x)=>a+x.hours,0);
-  let done=0;for(let i=0;i<S.day;i++)done+=DAYS[i].hours;done+=DAYS[S.day].hours-S.hours;
-  let pips='';for(let i=0;i<d.hours;i++)pips+='<div class="pip'+(i<S.hours?' on':'')+'"></div>';
-  return '<div class="top"><div class="top-in"><div>'+
-    '<div class="badge">День '+d.n+' · '+esc(d.date)+'</div>'+
-    '<div class="day">'+esc(d.ttl)+'</div></div>'+
-    '<div class="clock" title="Оставшееся время">'+pips+'</div></div>'+
-    '<div class="progressline"><i style="width:'+Math.round(done/total*100)+'%"></i></div></div>';
+  const d=DAYS[S.day];
+  let t='';for(let i=0;i<d.hours;i++)t+='<i class="'+(i<S.hours?'':'gone')+'"></i>';
+  return '<div class="top"><div class="tab">'+
+    '<div><div class="case">Дело № 1886/14 · день '+d.n+' · '+esc(d.date)+'</div>'+
+    '<div class="dayname">'+esc(d.ttl)+'</div></div>'+
+    '<div class="tally" title="Осталось времени">'+t+'</div>'+
+    '<div class="hrs">час.</div></div></div>';
 }
+
+/* --- план дня --- */
 function hubScreen(){
   const d=DAYS[S.day];
-  let h='<div class="hub-h fade"><h2>'+esc(d.ttl)+'</h2><div class="sub">'+esc(d.sub)+'</div></div><div class="wrap">';
+  let h='<div class="wrap fade"><div class="paper torn"><div class="plan">'+
+    '<div class="kick">План на день</div><h2>'+esc(d.ttl)+'</h2>'+
+    '<p class="sub">'+esc(d.sub)+'</p></div><div class="locs">';
   d.locs.forEach(l=>{
-    const v=S.visited[l.id],dead=v||S.hours<=0;
-    h+='<button class="loc'+(dead?' spent':'')+'" data-loc="'+l.id+'">'+
-      '<div class="ic">'+l.ic+'</div><div><b>'+esc(l.n)+'</b><span>'+esc(l.s)+'</span></div>'+
-      (v?'<div class="done">✓</div>':'<div class="done" style="color:#6b5a4a">1 ч</div>')+'</button>';
+    const v=S.visited[l.id];
+    h+='<button class="loc'+(v?' spent':'')+'" data-loc="'+l.id+'"'+(v||S.hours<=0?' disabled':'')+'>'+
+      '<div><b>'+esc(l.n)+'</b><span>'+esc(l.s)+'</span></div>'+
+      '<div class="mark">'+(v?'отработано':'1 час')+'</div></button>';
   });
-  if(S.hours<=0)h+='<button class="btn" data-loc="__end">Время вышло — закончить день</button>';
-  h+='<p class="smallcaps" style="margin-top:16px">Улик собрано: '+Object.keys(S.ev).length+' из '+Object.keys(EV).length+'</p></div>';
-  return h;
+  h+='</div>';
+  if(S.hours<=0)h+='<div style="padding:0 16px 18px"><button class="stampbtn" data-loc="__end">Время вышло</button></div>';
+  h+='<div style="padding:0 20px 18px" class="mini">В папке улик: '+Object.keys(S.ev).length+' из '+Object.keys(EV).length+'</div>';
+  return h+'</div></div>';
 }
+
+/* --- сцена --- */
 function sceneScreen(id){
-  const s=SC[id];if(!s)return '<div class="wrap"><p>…</p></div>';
+  const s=SC[id];if(!s)return '<div class="wrap"><div class="paper"><div class="body"><p>…</p></div></div></div>';
   let body='';
   s.t.forEach(p=>{
     if(typeof p==='string')body+='<p>'+esc(p)+'</p>';
@@ -1064,12 +1239,15 @@ function sceneScreen(id){
   s.ch.forEach((c,i)=>{
     const locked=c.need&&!S.ev[c.need];
     ch+='<button class="ch'+(c.need?' ev':'')+(locked?' locked':'')+'" data-ch="'+i+'"'+(locked?' disabled':'')+'>'+
-      '<span class="arrow">'+(c.need?'🗂':'▸')+'</span><span class="txt">'+esc(c.x)+
+      '<span class="txt">'+esc(c.x)+'</span>'+
       (locked?'<small>Нужна улика: «'+esc(EV[c.need].n)+'»</small>':(c.sub?'<small>'+esc(c.sub)+'</small>':''))+
-      '</span>'+(c.c?'<span class="cost">−'+c.c+' ч</span>':'')+'</button>';
+      (c.c?'<span class="cost">−'+c.c+' ч</span>':'')+'</button>';
   });
-  return '<div class="wrap fade"><div class="card">'+illus(s.motif,s.pal,s.ttl,s.loc)+
-    '<div class="body">'+body+'</div><div class="choices">'+ch+'</div></div></div>';
+  return '<div class="wrap fade"><div class="sheet-card"><div class="paper torn">'+
+    '<div class="hdr"><div class="where">'+esc(s.loc)+'</div><h2>'+esc(s.ttl)+'</h2>'+
+    '<div class="rule"></div><div class="rule"></div></div>'+
+    illus(s.motif,s.pal,s.loc)+
+    '<div class="body">'+body+'</div><div class="choices">'+ch+'</div></div></div></div>';
 }
 function bindMain(){
   app.querySelectorAll('[data-loc]').forEach(b=>b.onclick=()=>{
@@ -1083,53 +1261,55 @@ function bindMain(){
   });
 }
 
-/* ---------------- панели ---------------- */
+/* ---------------- вкладки папки ---------------- */
 nav.querySelectorAll('button').forEach(b=>b.onclick=()=>{
   const n=b.getAttribute('data-n');
-  if(n==='hub'){sheet=null;closeSheet();if(S.scene&&!SC[S.scene])S.scene=null;render();return;}
+  if(n==='hub'){closeSheet();render();return;}
   openSheet(n);
 });
-function closeSheet(){const el=document.querySelector('.sheet');if(el)el.remove();sheet=null;}
+function closeSheet(){const el=document.querySelector('.sheet');if(el)el.remove();sheet=null;
+  nav.querySelectorAll('button').forEach(b=>b.classList.remove('on'));}
 function openSheet(kind,keep){
   const ex=document.querySelector('.sheet');if(ex)ex.remove();
   sheet=kind;
   const el=document.createElement('div');el.className='sheet';
-  let h='<div class="sheet-in"><div class="sheet-h"><h2>'+
-    ({evi:'Улики',ver:'Версии',who:'Лица',menu:'Меню'}[kind])+'</h2><button class="x">✕</button></div>';
+  const titles={evi:'Папка улик',ver:'Доска версий',who:'Лица по делу',menu:'Служебное'};
+  let h='<div class="sheet-in"><div class="sheet-h"><h2>'+titles[kind]+'</h2><button class="x">Закрыть</button></div>';
   if(kind==='evi'){
     const ids=Object.keys(S.ev);
-    h+= ids.length?'':'<p style="color:var(--muted)">Записная книжка пуста. Улики появляются из осмотров, допросов и чужих оговорок.</p>';
+    h+= ids.length?'':'<div class="paper" style="padding:16px"><p style="margin:0">Папка пуста. Улики берутся из осмотров, допросов и чужих оговорок — и почти никогда не приходят сами.</p></div>';
     ids.forEach(id=>{const e=EV[id];
-      h+='<div class="evi'+(S.seenEv[id]===0?' new':'')+'"><b>'+esc(e.n)+'</b><p>'+esc(e.d)+'</p>'+
+      h+='<div class="evi'+(S.seenEv[id]===0?' new':'')+'"><span class="pin"></span><b>'+esc(e.n)+'</b><p>'+esc(e.d)+'</p>'+
         (e.t||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>';
       S.seenEv[id]=1;});
   }
   if(kind==='ver'){
     const p=pct(scores());
-    h+='<p style="color:var(--muted);font-size:14px;margin-top:0">Полосы показывают, насколько собранные вами улики поддерживают каждую версию. Это ваша убеждённость, а не истина.</p>';
+    h+='<div class="paper" style="padding:14px 16px;margin-bottom:12px"><p style="margin:0;font-size:15px">Насколько собранное вами поддерживает каждую версию. Это ваша убеждённость, а не истина: чаша перевешивает ровно на те бумаги, что лежат в папке.</p></div>';
     Object.keys(VERS).sort((a,b)=>p[b]-p[a]).forEach(k=>{const v=VERS[k];
       h+='<div class="ver'+(p[k]<=0?' dead':'')+'"><div class="vh"><b>'+esc(v.n)+'</b><span class="pct">'+p[k]+'%</span></div>'+
-        '<div class="bar"><i style="width:'+p[k]+'%;background:'+v.c+'"></i></div><p>'+esc(v.d)+'</p></div>';});
+        '<div class="gauge"><i style="width:'+p[k]+'%"></i></div><p>'+esc(v.d)+'</p></div>';});
   }
   if(kind==='who'){
     WHO.forEach(w=>{const known=w.f==='start'||S.ev[w.f];
-      h+='<div class="evi" style="border-left-color:'+(known?'var(--gold)':'#3a2f28')+'"><b>'+esc(known?w.n:'Неизвестное лицо')+'</b>'+
-        '<p>'+esc(known?w.r+'. '+w.d:'Вы ещё не столкнулись с этим человеком.')+'</p></div>';});
+      h+='<div class="evi'+(known?'':' unknown')+'"><b>'+esc(known?w.n:'Не установлено')+'</b>'+
+        '<p>'+esc(known?w.r+'. '+w.d:'Вы ещё не сталкивались с этим человеком.')+'</p></div>';});
   }
   if(kind==='menu'){
-    h+='<p style="color:var(--muted);font-size:14px">Прогресс сохраняется в браузере автоматически.</p>'+
-      '<button class="btn ghost" id="photos">Архивные фотографии: '+(S.flags.photos==='off'?'выкл':'вкл')+'</button>'+
-      '<button class="btn ghost" id="restart">Начать расследование заново</button>'+
-      '<div class="hr"></div><div class="smallcaps">Источник</div>'+
-      '<p style="color:var(--muted);font-size:14px">Фергюс Хьюм, «Тайна двухколёсного экипажа» (1886) — общественное достояние. Сюжетная канва, персонажи и развязка взяты из романа; все тексты, механики, развилки и концовки этой игры написаны заново.</p>';
+    h+='<div class="paper" style="padding:16px 18px;margin-bottom:12px">'+
+      '<p style="margin:0 0 12px;font-size:15px">Ход следствия сохраняется в браузере сам.</p>'+
+      '<button class="stampbtn ink" id="photos" style="margin:0 0 10px">Архивные фото: '+(S.flags.photos==='off'?'выкл':'вкл')+'</button>'+
+      '<button class="stampbtn" id="restart" style="margin:0">Начать дело заново</button></div>'+
+      '<div class="paper" style="padding:16px 18px"><p class="mini" style="margin:0 0 8px">Источник</p>'+
+      '<p style="margin:0;font-size:15px">Фергюс Хьюм, «Тайна двухколёсного экипажа» (1886) — общественное достояние. Сюжетная канва, персонажи и развязка взяты из романа; тексты, механики, развилки и концовки написаны заново.</p></div>';
   }
   el.innerHTML=h+'</div>';
   document.body.appendChild(el);
   el.querySelector('.x').onclick=closeSheet;
   const ph=el.querySelector('#photos');
-  if(ph)ph.onclick=()=>{S.flags.photos=(S.flags.photos==='off'?'on':'off');save();closeSheet();render();openSheet('menu');};
+  if(ph)ph.onclick=()=>{S.flags.photos=(S.flags.photos==='off'?'on':'off');save();openSheet('menu');};
   const r=el.querySelector('#restart');
-  if(r)r.onclick=()=>{if(confirm('Стереть прогресс и начать заново?')){localStorage.removeItem(SAVE);S=blank();closeSheet();render();}};
+  if(r)r.onclick=()=>{if(confirm('Стереть ход следствия и начать заново?')){localStorage.removeItem(SAVE);S=blank();closeSheet();render();}};
   nav.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.getAttribute('data-n')===kind));
   if(!keep)save();
 }
@@ -1138,26 +1318,31 @@ function openSheet(kind,keep){
 function finaleScreen(){
   const p=pct(scores());
   if(!pendingAcc){
-    let h='<div class="wrap fade"><div class="card">'+illus('court','blood','Имя','Кабинет прокурора, пятый день')+
+    let h='<div class="wrap fade"><div class="sheet-card"><div class="paper torn">'+
+     '<div class="hdr"><div class="where">Кабинет прокурора, пятый день</div><h2>Одна строка</h2>'+
+     '<div class="rule"></div><div class="rule"></div></div>'+
+     illus('court','blood','Бланк обвинительного заключения')+
      '<div class="body"><p>Прокурор придвигает бланк. Горби стоит у окна и не оборачивается. Пароход в Сидней даёт первый гудок.</p>'+
      '<p>Всё, что вы собрали за пять дней, умещается в одну строку: имя.</p>'+
-     '<p class="note">Обвинение примут только если у вас есть чем его подкрепить. Без улик любое имя — это просто мнение следователя.</p></div><div class="choices">';
+     '<p class="note">Без бумаг обвинение развалится. Прокурору нужно не ваше мнение, а доказательная база.</p></div><div class="choices">';
     ACCUSE.forEach((a,i)=>{
       const have=a.need.filter(x=>S.ev[x]).length, ok=have>=a.min;
-      h+='<button class="ch'+(ok?' ev':'')+'" data-acc="'+i+'"><span class="arrow">'+(ok?'⚖':'▸')+'</span>'+
-        '<span class="txt">'+esc(a.n)+'<small>'+esc(a.s)+(a.need.length?' · доказательная база: '+have+'/'+a.need.length:'')+'</small></span>'+
+      h+='<button class="ch'+(ok?' ev':'')+'" data-acc="'+i+'"><span class="txt">'+esc(a.n)+'</span>'+
+        '<small>'+esc(a.s)+(a.need.length?' · доказательная база: '+have+' из '+a.need.length:'')+'</small>'+
         '<span class="cost">'+(p[a.k]||0)+'%</span></button>';
     });
-    return h+'</div></div></div>';
+    return h+'</div></div></div></div>';
   }
   const a=pendingAcc;
-  let h='<div class="wrap fade"><div class="card">'+illus('court','blood',a.n,'Как вы это сделаете')+
-    '<div class="body"><p>Имя названо. Остаётся способ — и он решит, чем всё кончится.</p></div><div class="choices">';
+  let h='<div class="wrap fade"><div class="sheet-card"><div class="paper torn">'+
+    '<div class="hdr"><div class="where">Имя названо</div><h2>'+esc(a.n)+'</h2>'+
+    '<div class="rule"></div><div class="rule"></div></div>'+
+    '<div class="body"><p>Остаётся способ — и он решит, чем всё кончится.</p></div><div class="choices">';
   (METHODS[a.k]||[{k:'court',n:'Передать дело прокурору',s:''}]).forEach((m,i)=>{
-    h+='<button class="ch" data-met="'+i+'"><span class="arrow">▸</span><span class="txt">'+esc(m.n)+
-      (m.s?'<small>'+esc(m.s)+'</small>':'')+'</span></button>';});
-  h+='<button class="ch" data-met="back"><span class="arrow">↩</span><span class="txt">Назвать другое имя</span></button>';
-  return h+'</div></div></div>';
+    h+='<button class="ch" data-met="'+i+'"><span class="txt">'+esc(m.n)+'</span>'+
+      (m.s?'<small>'+esc(m.s)+'</small>':'')+'</button>';});
+  h+='<button class="ch" data-met="back"><span class="txt">Назвать другое имя</span></button>';
+  return h+'</div></div></div></div>';
 }
 function bindFinale(){
   app.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>{
@@ -1168,21 +1353,28 @@ function bindFinale(){
     const m=(METHODS[pendingAcc.k]||[{k:'court'}])[+v];
     S.endKey={acc:pendingAcc.k,met:m.k};save();render();window.scrollTo(0,0);});
 }
+
+/* ---------------- развязка ---------------- */
 function endScreen(){
-  const e=endingFor(S.endKey.acc,S.endKey.met), p=pct(scores());
-  const truth=S.endKey.acc==='M';
-  let h='<div class="wrap fade"><div class="card">'+illus(e.motif,e.pal,e.t,'Развязка')+
-    '<div class="end-card"><div class="rank">'+esc(e.r)+'</div><h1>'+esc(e.t)+'</h1><div class="txt">'+
-    e.p.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div><div class="hr"></div>'+
-    '<div class="stat"><span>Улик собрано</span><span>'+Object.keys(S.ev).length+' / '+Object.keys(EV).length+'</span></div>'+
-    '<div class="stat"><span>Настоящий убийца</span><span>'+(truth?'назван верно':'остался на свободе')+'</span></div>'+
-    '<div class="stat"><span>Невиновный спасён</span><span>'+(S.endKey.acc!=='B'&&S.endKey.acc!=='S'?'да':'нет')+'</span></div>'+
-    '<div class="stat"><span>Метод работы</span><span>'+(S.flags.harsh?'жёсткий':'корректный')+'</span></div>'+
-    '<div class="stat"><span>Судьба свидетельства</span><span>'+({public:'обнародовано',burn:'сожжено',settle:'содержание для Сэл'}[S.flags.paper]||'в архиве')+'</span></div>'+
-    '<div class="hr"></div><p style="color:var(--muted);font-size:13.5px;text-align:left">В романе Хьюма убийцей оказывается именно Роджер Морланд: он усыпил пьяного Уайта хлороформом, чтобы забрать брачное свидетельство и шантажировать Фретлби самому, и не рассчитал дозу. Признание Марка Фретлби — ложь умирающего отца. Если вы дошли до этого сами — вы раскрыли дело, которое в 1886 году не давалось читателям до последней главы.</p>'+
-    '<button class="btn" id="again" style="margin-top:18px">Расследовать заново</button></div></div></div>';
-  return h;
+  const e=endingFor(S.endKey.acc,S.endKey.met), truth=S.endKey.acc==='M';
+  const stamp=e.ok?'Дело закрыто':(S.endKey.acc==='K'?'Дело приостановлено':'Дело закрыто');
+  return '<div class="wrap fade"><div class="sheet-card"><div class="paper torn">'+
+    illus(e.motif,e.pal,'Развязка')+
+    '<div class="verdict"><div class="band">'+esc(e.r)+'</div><h1>'+esc(e.t)+'</h1>'+
+    '<div class="bigstamp'+(e.ok?'':' grey')+'">'+stamp+'</div>'+
+    '<div class="txt">'+e.p.map(x=>'<p>'+esc(x)+'</p>').join('')+'</div>'+
+    '<div class="ledger">'+
+      row('Улик подшито',Object.keys(S.ev).length+' из '+Object.keys(EV).length)+
+      row('Настоящий убийца',truth?'назван верно':'остался на свободе')+
+      row('Невиновный',(S.endKey.acc!=='B'&&S.endKey.acc!=='S')?'спасён':'осуждён')+
+      row('Метод работы',S.flags.harsh?'жёсткий':'корректный')+
+      row('Брачное свидетельство',{public:'обнародовано',burn:'сожжено',settle:'содержание для Сэл'}[S.flags.paper]||'осталось в архиве')+
+    '</div>'+
+    '<p class="afterword">У Хьюма убийцей оказывается Роджер Морланд: он усыпил пьяного Уайта хлороформом, чтобы забрать брачное свидетельство и шантажировать Фретлби уже самому, и не рассчитал дозу. Признание Марка Фретлби — ложь умирающего отца, спасающего дочь от позора. Читателям 1886 года это не давалось до последней главы.</p>'+
+    '<button class="stampbtn" id="again" style="margin-top:20px">Открыть дело заново</button>'+
+    '</div></div></div></div>';
 }
+function row(a,b){return '<div><span>'+esc(a)+'</span><span>'+esc(b)+'</span></div>';}
 function bindEnd(){document.getElementById('again').onclick=()=>{
   localStorage.removeItem(SAVE);S=blank();pendingAcc=null;render();window.scrollTo(0,0);};}
 
@@ -1190,6 +1382,7 @@ function bindEnd(){document.getElementById('again').onclick=()=>{
 S=load()||blank();
 if(S.started&&S.endKey)S=blank();
 render();
+
 </script>
 </body>
 </html>
